@@ -22,6 +22,7 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+app.MapHub<MyHub>("/polechudes");
 
 
 app.Run();
