@@ -6,7 +6,52 @@
         xmlns:local="clr-namespace:PoleChudes"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-     
-    </Grid>
+    <Canvas>
+        <Grid Height="434" Width="790" >
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Text="Ващ ход" HorizontalAlignment="Center" Margin="0 20 0 150" FontSize="20"/>
+            <ListBox VerticalAlignment="Center" HorizontalAlignment="Center" ItemsSource="{Binding Word}" Name="listbox">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Padding="15" Name="border">
+                            <TextBlock Name="text" Text="{Binding Letter}" FontSize="20"/>
+                        </Border>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Opened}" Value="True">
+                                <Setter 
+                                TargetName="border" 
+                                Property="Control.Background"
+                                Value="White"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Opened}" Value="False">
+                                <Setter 
+                                TargetName="border" 
+                                Property="Control.Background"
+                                Value="Black"/>
+                                <Setter 
+                                TargetName="text" 
+                                Property="Visibility"
+                                Value="Hidden"/>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <StackPanel Grid.Row="1" HorizontalAlignment="Center" Width="100">
+                <TextBlock Text="Буква?" HorizontalAlignment="Center"/>
+                <TextBox Text="{Binding Answer}"/>
+                <Button Content="Назвать" Click="SayChar"/>
+            </StackPanel>
+        </Grid>
+        
+    </Canvas>
 </Window>

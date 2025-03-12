@@ -1,15 +1,12 @@
-﻿namespace SignalIR
+﻿
+public class Game
 {
-    public class Game
-    {
-        public string ID { get; set; }
-        public string P1 { get; set; }
-        public string P2 { get; set; }
-        public string P3 { get; set; }
-        public string P4 { get; set; }
-        public string Turn { get; set; }
+    public string ID { get; set; }
+    public string P1 { get; set; }
+    public string P2 { get; set; }
+    public string P3 { get; set; }
+    public string P4 { get; set; }
+    public string Turn { get; set; }
 
-        public string[,] Field { get; set; } = new string[3, 3];
-
-    }
+    public string[,] Field { get; set; } = new string[3, 3];
 }
