@@ -117,8 +117,18 @@ namespace PoleChudes
                     {
                         foreach (ListBox lb in listbox.Items)
                         {
-                            
+                            lb.Items.Clear();
                         }
+                    });
+                    MyTurn = false;
+                }
+                await connection.SendAsync("NextGame", nextgame, Nick);
+                if (nextgame == "no")
+                {
+                    await connection.StopAsync();
+                    Dispatcher.Invoke(() =>
+                    {
+                        Close();
                     });
                 }
             });
