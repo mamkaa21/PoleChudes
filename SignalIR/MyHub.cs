@@ -14,6 +14,7 @@ internal class MyHub : Hub
         {
             await clientsByNick[a].SendAsync("opponent", b, id);
             await clientsByNick[b].SendAsync("opponent", a, id);
+
             await clientsByNick[a].SendAsync("maketurn", "Ваш ход");
         });
     }
@@ -41,8 +42,20 @@ internal class MyHub : Hub
 
     public async void MakeTurn(Turn turn)
     {
-        string next = rooms.GetNextPlayer(turn);
-        //string turnRes = rooms.M
+        bool check = rooms.CheckLetter(turn);
+        // проверка, угадана ли буква
+        // пользователям всем надо отправить новый статус слова
+        if (check = true)
+        {            
+            await Clients.Caller.SendAsync("maketurn");
+            
+            // если да, то этому же пользователю мы отправляем команду maketurn
+        }
+        else
+        {
+            string next = rooms.GetNextPlayer(turn);
+        }
+        // если нет, то уже другому
     }
 }
 

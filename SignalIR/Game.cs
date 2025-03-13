@@ -7,6 +7,12 @@ public class Game
     public string P3 { get; set; }
     public string P4 { get; set; }
     public string Turn { get; set; }
+    public string Question { get; set; }
+    public List<Word> Word { get; set; } = new();
+}
 
-    public string[,] Field { get; set; } = new string[3, 3];
+public class Word
+{
+    public string Letter { get; set; }
+    public bool Opened { get; set; } = false;
 }

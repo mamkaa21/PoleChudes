@@ -9,7 +9,6 @@ namespace PoleChudes
     public class Turn
     {
         public string GameID { get; set; }
-        public string Char { get; set; }
-        public string ListBox { get; set; }
+        public string Letter { get; set; }
     }
 }

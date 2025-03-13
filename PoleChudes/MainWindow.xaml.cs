@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Data.Common;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
@@ -7,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -53,7 +55,14 @@ namespace PoleChudes
             }
         }
 
-        public List<Word> Word { get; set; }
+        public string Question { get => question; set
+            {
+                question = value;
+                Signal();
+            }
+        }
+
+        public List<Word> Word { get => word; set => word = value; }
         public string Answer { get; set; }
         public MainWindow()
         {
@@ -61,15 +70,13 @@ namespace PoleChudes
             CreateConnection();
             HubMethods();
             DataContext = this;
-
-            Word = new List<Word>()
-            {
-
-            };
         }
 
 
         string gameId = string.Empty;
+        private string question;
+        private List<Word> word;
+
         private void HubMethods()
         {
             connection.On<string>("hello", s =>
@@ -81,10 +88,12 @@ namespace PoleChudes
                     Nick = win.Nick;
                 });
             });
-            connection.On<string, string>("opponent", (s, id) =>
+            connection.On<string, Game>("opponent", (s, id) =>
             {
-                gameId = id;
+                gameId = id.ID;
                 Opponent = s;
+                Question = id.Question;
+                Word = id.Word;
             });
             connection.On<string>("maketurn", s =>
             {
@@ -146,5 +155,41 @@ namespace PoleChudes
         public event PropertyChangedEventHandler? PropertyChanged;
         void Signal([CallerMemberName] string prop = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+
+        private async void MakeTurn(object sender, RoutedEventArgs e)
+        {
+            var lb = sender as ListBox;
+            if (string.IsNullOrEmpty(Answer) || Answer.Length > 1)
+                return;
+            string test = Answer.ToUpper();
+            await connection.SendAsync("MakeTurn",
+                    new Turn
+                    {
+                        GameID = gameId,
+                        Letter = test
+                    });
+            MyTurn = false;
+
+
+            //if (lb.ItemTemplate.HasContent)
+            //{
+            //    foreach (var wordChar in Word)
+            //    {
+            //        if (!wordChar.Opened && wordChar.Letter == test)
+            //        {
+
+            //            //var anim = FindResource("Storyboard1") as Storyboard;
+            //            //anim.Begin();
+
+            //            Task.Delay(1000).ContinueWith(s =>
+            //            {
+            //                wordChar.Opened = true;
+            //            });
+            //        }
+            //    }
+            //}
+        }
     }
+
+   
 }

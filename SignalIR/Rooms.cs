@@ -13,8 +13,8 @@
         }
     }
 
-    Action<string, string, string> action;
-    internal void SetStart(Action<string, string, string> action) 
+    Action<string, string, Game> action;
+    internal void SetStart(Action<string, string, Game> action) 
     {
         this.action = action;
     }
@@ -29,10 +29,12 @@
             b = a;
             a = z;
         }
-
-        var game = new Game { ID = Guid.NewGuid().ToString(), P1 = a, P2 = b, Turn = "Ваш ход" };
+       
+        // тут надо придумать вопрос и ответ
+        var game = new Game { ID = Guid.NewGuid().ToString(), P1 = a, P2 = b, Turn = "Ваш ход", Question = "Почему небо синее?", 
+            Word = "потому что".Select(s=>new Word { Letter = s.ToString()}).ToList()  };
         games.Add(game.ID, game);
-        action(a,b,game.ID);
+        action(a,b,game);
     }
 
     internal string GetNextPlayer(Turn turn)
@@ -51,9 +53,26 @@
         return result;
     }
 
-    //internal string MakeTurn(Turn turn) 
-    //{
-    //    string result = string.Empty;
+    internal bool CheckLetter(Turn turn)
+    {
+        bool result = false;
+        turn.Letter.ToString();
+        foreach (var w in games[turn.GameID].Word)
+        {
+            if (w.Letter == turn.Letter) 
+            {
+                // если есть совпадение буквы - мы ее открываем
+                // result = true
+                w.Opened = true;
+                result = true;
+            }    
+        }
+        return result;
+    }
 
-    //}
+    internal string MakeTurn(Turn turn)
+    {
+        string result = string.Empty;
+        return result;
+    }
 }
